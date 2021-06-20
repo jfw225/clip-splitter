@@ -8,7 +8,7 @@ Use your preferred package manager to install the packages listed in `requiremen
 
 Using pip:
 
-    $ python -m pip install -requirements.txt
+    $ python -m pip install -r requirements.txt
 
 ## Basic Usage
 
