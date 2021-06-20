@@ -1,0 +1,9 @@
+class KeyInputs:
+    NOP = -1
+    EXIT = 27
+    TOGGLE_CLIP = 13
+    TOGGLE_PLAYBACK = 32
+    NEXT_FRAME = 2555904
+    PREVIOUS_FRAME = 2424832
+    UP_FPS = 2490368
+    DOWN_FPS = 2621440
