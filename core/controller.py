@@ -1,3 +1,4 @@
+import os
 import cv2
 
 import core.config as cfg
@@ -12,6 +13,8 @@ class Controller(dict):
                     if not key.startswith("__")]
 
         super().__init__(mappings)
+
+        os.makedirs(cfg.DIR.OUTPUT, exist_ok=True)
 
         self.path = path
         self.reset()
@@ -29,7 +32,7 @@ class Controller(dict):
     def get_input(self):
         inp = input(
             "\nPlease provide the path to the video that you would like to clip: ")
-        self.path = inp
+        self.path = inp.replace("'", "").replace('"', "")
 
     def __iter__(self):
         return self.generator()
@@ -66,6 +69,8 @@ class Controller(dict):
             else:
                 frame = self.frames[self.current_frame]
 
+            frame = frame.copy()
+
             cv2.imshow(self.path, frame)
 
             while not self.map_input(cv2.waitKeyEx(self.fps)):
@@ -95,9 +100,11 @@ class Controller(dict):
             self.clip_frame = self.current_frame
         else:
             output_frames = self.frames[self.clip_frame:self.current_frame]
-            clip_name = self.path + "_clip_" + str(self.num_clips) + ".mp4"
-            print("Writing clip to: " + clip_name)
-            save_video(self.cap, clip_name, output_frames)
+            basename = os.path.splitext(os.path.basename(self.path))[0]
+            clip_name = basename + "_clip_" + str(self.num_clips) + ".mp4"
+            output_path = os.path.join(cfg.DIR.OUTPUT, clip_name)
+            print("Writing clip to: " + output_path)
+            save_video(self.cap, output_path, output_frames)
 
             self.clip_frame = None
             self.num_clips += 1
