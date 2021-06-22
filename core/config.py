@@ -1,5 +1,5 @@
 class VIDEO:
-    FPS = 6
+    FPS = 10
 
 
 class DIR:

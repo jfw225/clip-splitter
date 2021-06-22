@@ -31,3 +31,9 @@ You can use these keyboard inputs to control the tool:
 ### ESC -> EXIT TOOL
 
 The console will output the current frame and speed.
+
+
+TODO:
+get rid of backward
+only store recording frames
+put text on screen
