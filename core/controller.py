@@ -1,5 +1,6 @@
 import os
 import cv2
+from collections import deque
 
 import core.config as cfg
 from utils.utils import save_video
@@ -23,8 +24,9 @@ class Controller(dict):
         self.cap = None
         self.fps = 0
         self.fps_save = cfg.VIDEO.FPS
-        self.frames = list()
+        self.frames = deque(maxlen=cfg.VIDEO.CACHE_SIZE)
         self.current_frame = 0
+        self.total_frames = 0
 
         self.clip_frame = None
         self.num_clips = 0
@@ -42,15 +44,13 @@ class Controller(dict):
 
         self.cap = cv2.VideoCapture(self.path)
 
-        num_frames = 0
-
         while self.cap.isOpened():
             self.current_frame += 1
 
             print(
                 f"Current Frame: {self.current_frame} | Speed: {self.fps} ms per frame")
 
-            if self.current_frame >= num_frames:
+            if self.current_frame >= self.total_frames:
                 ret, frame = self.cap.read()
 
                 if not ret:
@@ -65,9 +65,10 @@ class Controller(dict):
 
                 self.frames.append(frame)
 
-                num_frames += 1
+                self.total_frames += 1
             else:
-                frame = self.frames[self.current_frame]
+                frame_number = self.get_frame_number(self.current_frame)
+                frame = self.frames[frame_number]
 
             frame = frame.copy()
 
@@ -77,6 +78,10 @@ class Controller(dict):
                 pass
 
             yield None
+
+    def get_frame_number(self, cf):
+
+        return max(0, len(self.frames) - (self.total_frames - cf))
 
     def map_input(self, raw_input):
         # print("Raw Input: " + str(raw_input))
@@ -97,9 +102,14 @@ class Controller(dict):
 
     def TOGGLE_CLIP(self):
         if self.clip_frame is None:
+            # Allow frames to grow unrestricted
+            self.frames = deque(self.frames)
             self.clip_frame = self.current_frame
         else:
-            output_frames = self.frames[self.clip_frame:self.current_frame]
+            fni = self.get_frame_number(self.clip_frame)
+            fnf = self.get_frame_number(self.current_frame)
+            output_frames = [self.frames[i] for i in range(fni, fnf)]
+            self.frames = deque(self.frames, maxlen=cfg.VIDEO.CACHE_SIZE)
             basename = os.path.splitext(os.path.basename(self.path))[0]
             clip_name = basename + "_clip_" + str(self.num_clips) + ".mp4"
             output_path = os.path.join(cfg.DIR.OUTPUT, clip_name)

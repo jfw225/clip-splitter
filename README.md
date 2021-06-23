@@ -34,6 +34,7 @@ The console will output the current frame and speed.
 
 
 TODO:
-get rid of backward
+get rid of backward -- only save last x frames
 only store recording frames
 put text on screen
+exit message
