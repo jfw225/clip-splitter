@@ -3,7 +3,7 @@ import cv2
 from collections import deque
 
 import core.config as cfg
-from utils.utils import save_video, draw_info
+from utils.utils import draw_recording, save_video, draw_info, draw_recording
 from utils.input_map import KeyInputs
 
 
@@ -73,6 +73,9 @@ class Controller(dict):
             frame = frame.copy()
 
             draw_info(frame, self.current_frame, self.fps)
+
+            if self.clip_frame is not None:
+                draw_recording(frame)
 
             cv2.imshow(self.path, frame)
 

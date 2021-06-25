@@ -35,3 +35,11 @@ def draw_info(image, cf, fps):
     draw_text(image, cf_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
     pos[1] += th + 15
     draw_text(image, fps_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
+
+
+def draw_recording(image):
+    text = "Recording..."
+
+    (tw, th), _ = cv2.getTextSize(text, 0, VIDEO.FONT_SCALE, VIDEO.FONT_THICK)
+    pos = [5, th + 5]
+    draw_text(image, text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
