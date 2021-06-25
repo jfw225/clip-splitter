@@ -1,5 +1,7 @@
 import cv2
 
+from core.config import VIDEO
+
 
 def set_saved_video(input_video, output_video, size):
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
@@ -18,5 +20,18 @@ def save_video(input_video, output_path, frames):
     video.release()
 
 
-def draw_text(image, text, pos):
-    pass
+def draw_text(image, text, size, color, pos):
+    cv2.putText(image, text, pos, cv2.FONT_HERSHEY_SIMPLEX, size, color,
+                VIDEO.FONT_THICK, lineType=cv2.LINE_AA)
+
+
+def draw_info(image, cf, fps):
+    cf_text = f"Current Frame: {cf}"
+    fps_text = f"Current Speed: {fps}"
+
+    (tw, th), _ = cv2.getTextSize(cf_text, 0, VIDEO.FONT_SCALE, VIDEO.FONT_THICK)
+    ih, iw, _ = image.shape
+    pos = [iw - tw - 20, th]
+    draw_text(image, cf_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
+    pos[1] += th + 15
+    draw_text(image, fps_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
