@@ -31,9 +31,7 @@ def draw_info(image, cf, fps, max_frames):
 
     (tw, th), _ = cv2.getTextSize(cf_text, 0, VIDEO.FONT_SCALE, VIDEO.FONT_THICK)
     ih, iw, _ = image.shape
-    print(image.shape)
     pos = [iw - tw - 400, th]
-    print(pos)
     draw_text(image, cf_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
     pos[1] += th + 15
     draw_text(image, fps_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
