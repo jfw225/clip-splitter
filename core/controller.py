@@ -43,6 +43,7 @@ class Controller(dict):
         """ Yields the video playback. """
 
         self.cap = cv2.VideoCapture(self.path)
+        MAX_FRAMES = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         while self.cap.isOpened():
             self.current_frame += 1
@@ -72,7 +73,7 @@ class Controller(dict):
 
             frame = frame.copy()
 
-            draw_info(frame, self.current_frame, self.fps)
+            draw_info(frame, self.current_frame, self.fps, MAX_FRAMES)
 
             if self.clip_frame is not None:
                 draw_recording(frame)

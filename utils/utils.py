@@ -25,13 +25,15 @@ def draw_text(image, text, size, color, pos):
                 VIDEO.FONT_THICK, lineType=cv2.LINE_AA)
 
 
-def draw_info(image, cf, fps):
-    cf_text = f"Current Frame: {cf}"
-    fps_text = f"Current Speed: {fps}"
+def draw_info(image, cf, fps, max_frames):
+    cf_text = f"Current Frame: {cf}/{max_frames}"
+    fps_text = f"Current Speed: {1000//fps if fps else 0} fps"
 
     (tw, th), _ = cv2.getTextSize(cf_text, 0, VIDEO.FONT_SCALE, VIDEO.FONT_THICK)
     ih, iw, _ = image.shape
-    pos = [iw - tw - 20, th]
+    print(image.shape)
+    pos = [iw - tw - 400, th]
+    print(pos)
     draw_text(image, cf_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
     pos[1] += th + 15
     draw_text(image, fps_text, VIDEO.FONT_SCALE, (0, 0, 255), pos)
