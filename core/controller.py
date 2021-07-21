@@ -46,8 +46,6 @@ class Controller(dict):
         MAX_FRAMES = int(self.cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
         while self.cap.isOpened():
-            self.current_frame += 1
-
             print(
                 f"Current Frame: {self.current_frame} | Speed: {self.fps} ms per frame")
 
@@ -83,6 +81,7 @@ class Controller(dict):
             while not self.map_input(cv2.waitKeyEx(self.fps)):
                 pass
 
+            self.current_frame += 1
             yield None
 
     def get_frame_number(self, cf):
